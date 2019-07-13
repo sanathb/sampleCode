@@ -1,0 +1,134 @@
+Git Questions
+
+// -----------------------------------------------------------------------
+
+Question #6.1
+You have identified a specific line of code within a file that has not been clearly documented.
+Using Git, how would you identify who wrote the line of code?
+
+Answer:
+git blame -L <line number>,+<off set> <path to file>
+Ex: git blame -L 17,+2 Questions/SBS.txt
+
+This will give the commit id and the Author.
+Also some IDEs have plugins where you can get this with a hot key.
+But I prefer it the command line way.
+
+// -----------------------------------------------------------------------
+
+Question #6.2
+You have been working on multiple files and realise that you need to erase all changes you have made to a specific file, whilst preserving the state of all other files.
+Using Git, how would you erase your changes to that file, whilst commiting the changes for all other files.
+
+Answer:
+Say the files modified are
+f1.php
+f2.php
+f3.php
+
+Now I need to erase the changes made to f2.php
+
+git checkout f2.php
+
+Now only f1.php and f3.php will have the modified content and f2.php will be reset.
+
+You can verify by giving git status command and it should show modified files as f1.php and f3.php
+
+Now git add f1.php f3.php
+git commit -m "Answer to 6.2"
+git push origin <local branch>:<destination branch>
+
+
+// -----------------------------------------------------------------------
+
+Question #6.3
+You've been tasked with working on a new experimental feature for the site.
+Using Git, how would you continue to commit your work to the same Git repo without conflicting with other developers work within the repo?
+Once the feature has been completed, how would you add your code to the same code base as the other developers?
+
+Answer:
+Assuming we are in the develop branch
+First get the latest develop branch
+git pull origin develop
+Now create a branch say "feature/experimental-feature"
+git checkout -b feature/experimental-feature
+
+We now create or modify files.
+git add <file1> [file2...]
+git commit -m "Implement new experimental feture"
+
+Push to the repo
+git push origin feature/experimental-feature:feature/experimental-feature
+
+This will also give you a url to send pull request. You can also send the pull request from bitbucket/github web page.
+
+Now the reviewer will review your code and merge it. He can also pull the code to his local and check.
+
+git fetch && git checkout feature/experimental-feature
+At this point when the reviewer is fetching the feature branch, the develop branch might have moved further.
+
+git fetch origin develop
+git rebase origin/develop
+
+Fix any merge conflicts. Run the unit tests. If everything is fine
+
+git push origin feature/experimental-feature:feature/experimental-feature
+and then go to github/bitbucket to the feature branch and merge the code to develop
+
+or 
+merge the feature in local develop branch and then push
+
+git checkout develop
+git rebase origin/feature/experimental-feature
+git push origin develop:develop
+
+I choose rebase over merge as it is much cleaner when we look at the git logs.
+
+// -----------------------------------------------------------------------
+
+Question #6.4
+Using Git, you are working on a specific file (my_directory/file.php) within the branch MY_BRANCH; this file is also available within the MASTER branch.
+How would you compare the changes of this file between the two branches?
+
+Answer:
+Assuming I am in my_directory and in MY_BRANCH
+
+git diff MASTER file.php
+
+Also you can use diff tools if you have configured it.
+Ex: git difftool MASTER file.php
+
+// -----------------------------------------------------------------------
+
+Question #6.5
+You are using a third-party company to host your private Git repository.
+The repository contains the code base to the entire project, including all access details required to access the database.
+What steps could you take to improve the security on such sensitive data? 
+How can you ensure that the code can still access required credentials?
+
+Answer:
+
+Method1:
+Say the credentials are in a file called credentials.php
+Now we have to create a file called credentials.php.sample and add credentials.php to the .gitignore
+The credentials.php.sample will have all the credential variables set to empty string.
+This will serve as a reference for whoever clones the repo.
+The code base will still use the credentials.php
+
+Whenever someone clones this repo, they have to create a credentials.php and add the credentials there.
+Now whenever the code has to be pushed, the credentials.php file will never be shown/pushed as we have added it in the .gitignore
+
+The developers can use their test credentials and in the production system, the admin can configure/create a credentials.php with the production credentials.
+
+Method2:
+All these sensitive credentials can be made to be read from the environment variables.
+In the code we can have say $db_password = getenv('DB_PASSWORD');
+
+We have to configure the server such that whenever an instance spins up, it is able to have the required envirnment variables.
+Also when developing in local we have to set these environment variables with test credentials.
+
+
+The credentials can be shared via services like lastpass.
+
+___________________________________________________________________________________________________
+___________________________________________________________________________________________________
