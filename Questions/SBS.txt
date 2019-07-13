@@ -1,0 +1,472 @@
+
+PHP General Questions
+
+// -----------------------------------------------------------------------
+
+Question #1.1
+What are some limitations of PHP over other languages?
+
+// -----------------------------------------------------------------------
+
+Question #1.2
+In PHP, how are php://input and $_POST related?
+How can you access the content of php://input?
+
+// -----------------------------------------------------------------------
+
+Question #1.3
+In PHP, what is namespacing and how can it be used?
+Supply a short code snippet of a namespace in use.
+
+// -----------------------------------------------------------------------
+
+Question #1.4
+In PHP, what is the difference between the keyword self and static. When would you use one
+over the other?
+
+___________________________________________________________________________________________________
+___________________________________________________________________________________________________
+
+PHP Code Questions
+
+// -----------------------------------------------------------------------
+
+Question #2.1
+The word 'Lorem' is ciphered to the number 121518513.
+Provide a function that is able to convert any defined word using the same cipher pattern.
+Test the function using the word 'Ipsum' and provide the returned number.
+
+// -----------------------------------------------------------------------
+
+Question #2.2
+The output of the following code is that $variable_a = 4, and $variable_b = 3, explain why.
+
+function my_function(&$my_argument)
+{
+    $response = $my_argument;
+    $my_argument += 1;
+    
+    return $response;
+}
+
+$variable_a = 3;
+$variable_b = my_function($variable_a);
+
+// -----------------------------------------------------------------------
+
+Question #2.3
+Task A
+Create a function that will generate a random hand of 5 standard playing cards from a single deck of cards.
+The hand of cards must be returned in the format: array('2c', '6d', 'as', 'jh', '10c');
+For this test, we are looking for elegant readable code.
+
+Task B
+Create a function that will return a boolean result as to whether the hand of cards returned by the above function contains a 'straight' or 'straight flush'.
+For this test we are looking for as few code characters as possible (Code elegance is not required). 
+Note: This is testing your creativity for coming up with a solution - it is not expected to be easily readable or best-practice.
+It has been done with as few as 61 characters, but more commonly between 100-225 chars - the lower the better.
+
+Notes
+Aces are high AND low.
+The #10 cards are 3 characters (10h, 10c, 10s, 10d)
+Reference
+Straight : http://en.wikipedia.org/wiki/List_of_poker_hands#Straight
+Straight Flush : http://en.wikipedia.org/wiki/List_of_poker_hands#Straight_flush
+
+// -----------------------------------------------------------------------
+
+Question #2.4
+Write a fluent interface that will get and set the following data:
+• Name
+• Phone Number
+• Email
+
+// -----------------------------------------------------------------------
+
+Question #2.5
+Using an array of numeric values representing the history of stock prices on a day-to-day basis, create a function that returns what would have been the best days to buy and then sell the stock at a profit.
+• Only a single stock can be held at one time.
+• No stock is held at the start of the function - e.g. the first action should be to buy stock.
+• Buy and sell as many times as required to maximise profits.
+
+The returned output needs to state the following data:
+• All transactions listing the numeric days and prices that stock was bought and sold.
+• The profit of each completed transaction.
+• The total profit of all transactions.
+• Note: All stocks must be sold by the end of the stock price history.
+
+As an example, using the following stock value history: '300', '250', '260', '310', '215', '280'.
+Buy on day 2 @ 250, sell on day 4 @ 310, buy again on day 5 @ 215 and sell on day 6 @ 280.
+This would have returned a profit of 60 + 65 = 125. 
+
+The returned data should be within an array structured as follows:
+array(
+  'transactions' => array(
+    '0' => array(
+      'bought' => array(
+        'day' => [numeric value],
+        'value' => [numeric value]
+      ),
+      'sold' => array(
+        'day' => [numeric value],
+        'value' => [numeric value]
+        ),
+      'profit' => [numeric value],
+    ),
+    ...[repeat as necessary]...
+  ),
+  'total_profit' => [numeric value]
+);
+
+The function should be able to handle any array of numeric values supplied, however, use the following values for your answer.
+
+$stock_price_history = array(360, 255, 260, 230, 150, 100, 135, 265, 750, 460, 600);
+function buy_sell_stock($stock_price_history)
+{
+  ...
+}
+
+// -----------------------------------------------------------------------
+
+Question #2.6
+An online shop can accept orders 24hrs a day, 365 days a year.
+However, the shop needs to post the orders to customers and can only do so on business days before 4pm.
+Any orders received after 4pm need to be dispatched the next business day.
+The deliveries then take 3 business days (including the dispatch date) to be delivered to the customer.
+
+Dispatch Date Example
+• #1: Ordered BEFORE 4pm on Monday 2000-01-03 (15:59:59) | Delivery: Wednesday 2000-01-05
+• #2: Ordered AFTER 4pm Monday 2000-01-03 (16:00:00) | Delivery: Thursday 2000-01-06
+
+A business day is considered Monday to Friday and does not include the following dates:
+• New Year's Day : 1st January
+• Australia Day : 26th January
+• Good Friday (Easter) : Variable date
+• Easter Monday : Variable date
+• Anzac Day : 25th April
+• Queen's Birthday : Second Monday in June
+• Labour Day : First Monday in October
+• Christmas Day : 25th December
+• Boxing Day : 26th December
+
+Important notes:
+• All dates are for NSW public holidays.
+• All times are for Sydney Australia.
+• The solution must work for all years since the year 2000 onwards (not just this year).
+• Orders will not be dispatched on non-business days.
+• Dispatched orders will be delayed during transit over non-business days - e.g. an order dispatched on Friday will not arrive until Tuesday (3 day transit).
+• If one of the listed holidays falls on a Saturday or Sunday, it must be rolled over to the next Monday - with the exception of Anzac Day (which doesn't).
+
+Create a class that when given a specific date and time formatted YEAR-MONTH-DAY HOUR:MINUTE:SECOND (Y-m-d H:i:s), will return via two separate methods the dispatch date and the delivery date of the order formatted as YEAR-MONTH-DAY. Include unit tests for each date.
+
+// -----------------------------------------------------------------------
+
+Question #2.7
+
+This question requires tight adherence to the defined spec.
+
+The following code has many errors, problems and examples of bad usage of code.
+Using only PHP functions or classes and methods (No vendor frameworks), rewrite the code so it is secure, efficient/optimised and returns no errors.
+
+The purpose of the code is to connect to the database, and output data only from the column 'example_column' for however many rows that are returned.
+The database query needs to be filtered to equal a querystring parameter called 'parameter' and to not equal the defined $example_integer.
+
+// Connect to the database.
+mysql_connect("localhost", 'admin', "password") or die(mysql_error());
+mysql_select_db("my_database") or die(mysql_error());
+// Set an INTEGER variable to be used within the database query.
+$example_integer = "123"
+// Retrieve ONLY the column 'example_column' from 'example_table'.
+$result = mysql_query('SELECT * FROM example_table WHERE "example_column" == $_REQUEST['parameter'] && "example_column" NOT IN ("$example_integer")') or die(mysql_error());
+// Loop through the returned record(s) from the database query and output all data for each row.
+for ($i=0;($row=mysql_fetch_array($result));$i+1){ 
+  print_r('<pre>'.$row);
+} 
+
+// -----------------------------------------------------------------------
+
+Question #2.8
+The following controller action code is responsible for writing data to the DB. It handles other tasks that involve invoking remote services prior to writing to the DB. 
+
+In a few words, describe what could go wrong with the implementation and how would you architect this better.
+
+use SolrHelper;
+use GoogleHelper;
+use Response;
+
+Class PublicationController extends Controller {
+  
+   public function insertDocumentToDB($json)
+   {
+       $updatedJson = $json;
+
+       try {
+           $updatedJson = SolrHelper::solrCreate($json);
+           $updatedJson = GoogleHelper::autoTagExtract($updatedJson);
+       } catch(Exception $e) {
+           throw new Exception('There was an error with a third party service');
+       }
+
+       $this->getContainer()->get('mongo')->insert($updatedJson);
+       return new Response('OK', 200);
+   }
+}
+
+___________________________________________________________________________________________________
+___________________________________________________________________________________________________
+
+Database Questions
+Note: All of the following questions are with reference to using MySQL.
+
+// -----------------------------------------------------------------------
+
+Question #3.1 
+The following two tables contain data that is related to each other via the 'id' of 'table_1' and 'foreign_key' of 'table_2'.
+Write an SQL query that will output all columns from 'table_1' and 'column_z' of 'table_2' merged together into a single query.
+
+The schema of both tables is as follows:
+
+CREATE TABLE `table_1` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `column_x` varchar(255) DEFAULT NULL,
+    `column_y` varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `table_2` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `foreign_key` int(11) DEFAULT NULL,
+    `column_z` varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `foreign_key` (`foreign_key`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+// -----------------------------------------------------------------------
+
+Question #3.2
+A table has over 1 million rows with multiple columns containing long text strings.
+A simple query on the page is used for pagination to display pages of the results.
+When querying low page numbers, it runs within 0.01 seconds per query, however, when viewing high page counts the query time extends dramatically to over 0.5 seconds.
+Both example queries are included below.
+
+SELECT table_1.*
+FROM table_1
+WHERE table_1.column = "zyx"
+ORDER BY table_1.date DESC
+LIMIT 0, 20;
+Time: 0.01s
+
+SELECT table_1.*
+FROM table_1
+WHERE table_1.column = "zyx"
+ORDER BY table_1.date DESC
+LIMIT 10000, 20;
+Time: 0.5s
+
+What is the issue with this query? 
+Using only SQL and the existing defined parameters, how would you rewrite the query to enhance the performance?
+
+// -----------------------------------------------------------------------
+
+Question #3.3
+A simple query includes a sub-query within the SQL SELECT statement.
+The sub-query returns a column value from a second table that matches the date from the first table.
+This query is not running at an optimised speed, how would you rewrite the query to improve the performance.
+
+SELECT t1.id, t1.name, t1.date AS date_filter, (SELECT t2.column_x FROM table_2 t2 WHERE t2.date = date_filter LIMIT 1) AS column_x
+FROM table_1 t1
+WHERE t1.category_id = 10
+ORDER BY t1.date
+LIMIT 10
+
+// -----------------------------------------------------------------------
+
+Question #3.4
+A table contains a set of unique rows of data that includes a composite index on the 'column_1' and 'column_2' columns.
+You have a script that needs to update existing rows within the table, if the row does not exist, then a new row needs to be inserted into the table.
+Using the basic table schema below, how would you write a single SQL query to handle both the INSERT and UPDATE events?
+
+CREATE TABLE `table_1` (
+    `column_1` varchar(255) DEFAULT NULL,
+    `column_2` varchar(255) DEFAULT NULL,
+    `column_3` varchar(255) DEFAULT NULL,
+    UNIQUE KEY `column_1_column_2` (`column_1`, `column_2`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+___________________________________________________________________________________________________
+___________________________________________________________________________________________________
+
+Security Questions
+
+// -----------------------------------------------------------------------
+
+Question #4.1 
+A user clicks the following link:
+http://www.sitea.com/?search=%22%3E%3C/style%3E%3Cscript%3Ea=eval;b=alert;a%28b%28/%20Hey!/.source%29%29;%3C/script%3E%27%22%3E
+
+When the page reloads, a JavaScript alert displays the message 'Hey!'.
+
+• What has occurred in this situation?
+• What are the potential dangers?
+• How can it be prevented?
+
+// -----------------------------------------------------------------------
+
+Question #4.2
+The following query is requested via PHP.
+
+$query = mysql_query('
+    SELECT t1.id, t1.name, t2.category
+    FROM table_1 t1
+        JOIN table_2 t2 ON t1.id = t2.foreign_key
+    WHERE 
+        t1.date > DATE_SUB(NOW(), INTERVAL 1 MONTH) AND
+        t2.category = "'.$_GET['parameter'].'"
+    ORDER BY t.date DESC
+');
+
+What is the problem with this?
+How can the problem be prevented?
+
+// -----------------------------------------------------------------------
+
+Question #4.3
+User X has just successfully logged into Site A - their bank.
+User X then leaves Site A and visits Site B which is a message board/forum that allows other users to post html code.
+User Y on Site B posts an image with the following html: <img src="http://www.sitea.com/?action=transfer-funds&amount=1000" style="visibility:hidden;"/>
+User X then views the page containing User Y's posted html.
+Without User X knowing, by viewing User Y's code, their Bank at Site A has just transferred money from their account to User Y.
+
+• What has occurred here?
+• Which parties are responsible?
+• How can the problem be prevented?
+
+___________________________________________________________________________________________________
+___________________________________________________________________________________________________
+
+Theory Questions
+
+// -----------------------------------------------------------------------
+
+Question #5.1
+You've just inherited a PHP application that is running slowly. 
+What kind of techniques would you use to determine the cause of the problem, and what kind of solutions do you think would help improve the situation?
+
+// -----------------------------------------------------------------------
+
+Question #5.2
+An third-party API that is important to your site is not 100% reliable in regards to up-time. 
+Without access to the development team of the API, how would you go about ensuring you have the best possible access to the data, even if the service is down?
+
+No code required, a short summary is fine. 
+Bonus: Provide more than one option, with reason as to why one should be used over the other.
+
+// -----------------------------------------------------------------------
+
+Question #5.3
+You are put in charge of planning the caching strategy of a high traffic site.
+• How would you setup the caching strategy for the site.
+• What kind of technologies and/or third-party services would you use?
+• What kind of challenges need to be considered?
+
+Points to consider:
+1. Content on the site will be regularly updated via a CMS using a MySQL database; whilst other content would remain unchanged for long periods of time.
+2. Elements of each page within the site can contain dynamic content that is customised to a logged in user - e.g. it may display their username and comment notifications.
+3. Content within each page may contain many image assets.
+4. Content on the site is built from data sourced via a third-party API request - e.g. a count displaying the number of times a page has been shared via social media.
+
+// -----------------------------------------------------------------------
+ 
+Question #5.4
+You are managing a site with over 100,000 articles.
+Approximately 300 new articles are added to the site every day.
+
+The sitemap for the site is setup with the following structure:
+articles_1.xml
+articles_2.xml
+articles_3.xml
+... etc
+
+Each of these files list 1,000 articles listed in chronological order using the Sitemap XML schema (http://www.sitemaps.org/protocol.html).
+The file articles_1.xml always contains the 1,000 most recently published articles, then articles_2.xml contains 1,001-2,000 etc most recent articles.
+As the article ages, the <lastmod> and <changefreq> nodes within the XML will need to be updated.
+
+What issue can you see this causing?
+Considering that you can change the structuring and naming of the files, how would you propose that the solution could be fixed?
+Note: The solution must allow for the <lastmod> and <changefreq> nodes to be updated when required.
+
+// -----------------------------------------------------------------------
+
+Question #5.5
+Using a real-world project that you were involved in, describe the architectual design of the system.
+In your answer, include the following:
+• What was the purpose of the system?
+• What technologies were used?
+• How were the technologies implemented and how did they interact with each other?
+• What potential problems did the design resolve?
+• What issues were encountered during the design?
+• What would you do differently next time?
+
+___________________________________________________________________________________________________
+___________________________________________________________________________________________________
+
+Git Questions
+
+// -----------------------------------------------------------------------
+
+Question #6.1
+You have identified a specific line of code within a file that has not been clearly documented.
+Using Git, how would you identify who wrote the line of code?
+
+// -----------------------------------------------------------------------
+
+Question #6.2
+You have been working on multiple files and realise that you need to erase all changes you have made to a specific file, whilst preserving the state of all other files.
+Using Git, how would you erase your changes to that file, whilst commiting the changes for all other files.
+
+// -----------------------------------------------------------------------
+
+Question #6.3
+You've been tasked with working on a new experimental feature for the site.
+Using Git, how would you continue to commit your work to the same Git repo without conflicting with other developers work within the repo?
+Once the feature has been completed, how would you add your code to the same code base as the other developers?
+
+// -----------------------------------------------------------------------
+
+Question #6.4
+Using Git, you are working on a specific file (my_directory/file.php) within the branch MY_BRANCH; this file is also available within the MASTER branch.
+How would you compare the changes of this file between the two branches?
+
+// -----------------------------------------------------------------------
+
+Question #6.5
+You are using a third-party company to host your private Git repository.
+The repository contains the code base to the entire project, including all access details required to access the database.
+What steps could you take to improve the security on such sensitive data? 
+How can you ensure that the code can still access required credentials?
+
+___________________________________________________________________________________________________
+___________________________________________________________________________________________________
+
+Logic Question
+
+// -----------------------------------------------------------------------
+
+Question #7.1
+No code is required for this question.
+
+The following 6 cards are piled on top of each other:
+• 3 Clubs
+• 3 Spades
+• 6 Diamonds
+• 7 Clubs
+• Queen Hearts
+• King Clubs
+
+Considering the following information, determine and EXPLAIN your workings for the order of the pack of cards. 
+1. The cards are randomly shuffled.
+2. The 7 Clubs is above the Queen Hearts.
+3. The bottom cards value is the sum of 3 of the other cards.
+4. One red card is directly on top of the other red card.
+5. The 6 Diamonds is directly below either 3 Clubs or 3 Spades.
+6. The Queen Hearts is above the Spade.
+7. A black card is on the top of the pile.
