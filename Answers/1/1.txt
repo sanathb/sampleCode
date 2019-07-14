@@ -1,0 +1,158 @@
+PHP General Questions
+
+// -----------------------------------------------------------------------
+
+Question #1.1
+What are some limitations of PHP over other languages?
+
+Answer:
+1. No out-of-box support for writing asynchronous code compared to Java, golang
+2. Because it is  a scripting language and is interpreted, it will be a bit slower than compiled languages like C,C++
+3. It is not efficient for Mathematical calculations.
+4. Has some inconsistency in order of arguments for functions and we have to refer the documentation to be sure
+Ex:
+callback last
+array_filter ( array $array [, callable $callback [, int $flag = 0 ]] ) : array
+
+callback first
+array_map ( callable $callback , array $array1 [, array $... ] ) : array
+
+Order of arguments
+strpos ( string $haystack , mixed $needle [, int $offset = 0 ] ) : int
+in_array ( mixed $needle , array $haystack [, bool $strict = FALSE ] ) : bool
+
+// -----------------------------------------------------------------------
+
+Question #1.2
+In PHP, how are php://input and $_POST related?
+How can you access the content of php://input?
+
+Answer:
+
+php://input returns all the raw data after the HTTP-headers of the request, regardless of the content type
+Say if we pass raw data in a PUT method php://input will have it but not $_POST
+
+The PHP superglobal $_POST, only is supposed to wrap data that is either
+application/x-www-form-urlencoded
+multipart/form-data-encoded
+
+Accessing php://input
+$input = file_get_contents("php://input");
+
+
+
+// -----------------------------------------------------------------------
+
+Question #1.3
+In PHP, what is namespacing and how can it be used?
+Supply a short code snippet of a namespace in use.
+
+Namespaces are the way of encapsulating items so that same names can be reused without name conflicts.
+It allows you to use the same function or class name in different parts of the same program without causing a name collision.
+
+Ex:
+Say I have a area calculator lib
+
+namespace Sballal\AreaCalculator;
+class Calculator {
+	function calclate()
+	{
+	  
+	}
+}
+
+and another lib Temperature calculator
+
+namespace Sballal\TempCalculator;
+class Calculator {
+	function calclate()
+	{
+
+	}
+}
+
+Now say I want to use these in my code.
+
+namespace Sbs;
+
+use Sballal\AreaCalculator as Area;
+use Sballal\TempCalculator as Temp;
+
+Class foo {
+	function bar () {
+		$area = new Area\Calculator();
+		$temp = new Temp\Calculator();
+
+		echo "Area is ". $area->calculate();
+		echo "Temperature is ". $temp->calculate();
+	}
+}
+
+// -----------------------------------------------------------------------
+
+Question #1.4
+In PHP, what is the difference between the keyword self and static. When would you use one
+over the other?
+
+Answer:
+The difference will come when we use late static binding.
+
+Ex:
+class Car
+{
+    public static function model() {
+         self::getModel();
+    }
+
+    protected static function getModel() {
+        echo "I am a Car!";
+    }
+
+}
+
+class Mercedes extends Car
+{
+
+    protected static function getModel() {
+        echo "I am a Mercedes!";
+    }
+
+}
+
+Mercedes::model();
+
+// The output will be "I am a Car!"
+
+The way the keyword “self” works is that it will call the current class’s implementation of the getModel function – and since the model function is defined inside the Car class, the current class would be the Car class. So, it will call the Car class implementation of getModel and NOT the Mercedes class implementation.
+
+Now if we want to use the Mercedes's getModel(), then it is late static binding.
+Late static bindings means that a call to a static function that is inherited will “bind” to the calling class at runtime. We now use "static" instead of "self" in the Car class.
+
+class Car
+{
+    public static function model() {
+         static::getModel();
+    }
+
+    protected static function getModel() {
+        echo "I am a Car!";
+    }
+
+}
+
+class Mercedes extends Car
+{
+
+    protected static function getModel() {
+        echo "I am a Mercedes!";
+    }
+
+}
+
+Mercedes::model();
+
+// The output will be "I am a Mercedes!"
+
+
+___________________________________________________________________________________________________
+___________________________________________________________________________________________________
