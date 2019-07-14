@@ -1,0 +1,185 @@
+Theory Questions
+
+// -----------------------------------------------------------------------
+
+Question #5.1
+You've just inherited a PHP application that is running slowly.
+What kind of techniques would you use to determine the cause of the problem, and what kind of solutions do you think would help improve the situation?
+
+Answer:
+Techniques to determine the cause of the problem:
+Determine which parts of the application is slow and when is it slow.
+Analyze the spikes in loads.
+Check if the cache is being used properly.
+Analyze the geo location of the client and where the load is coming from
+Analyze the architecture(DB, Server, Scaling)
+Alalyze the APIs that are slow.
+Check the MySQL queries used for the APIs.
+Check if the DB can be normalized or indexed to optimize some queries.
+Check the size of output data. If the output data is too lagrge, we can paginate or return a batch of results at a time.
+
+Solution for improvement:
+If the application is too complex, check if we can break it into microservices.
+Use caching, cache query results, use CDN or AWS cloudfront for dynamic contents.
+Scale the DB (AWS RDS), use load balancing, auto scaling
+Use indexing for MySQL so that query time is faster.
+If possible, use AWS lambda for smaller but slightly heavier tasks.
+See that the application is asyncronous, i.e the page/service makes asyncronous calls to APIs and loads the page.
+Improve the code to be more efficient in time complexity.
+
+// -----------------------------------------------------------------------
+
+Question #5.2
+An third-party API that is important to your site is not 100% reliable in regards to up-time. 
+Without access to the development team of the API, how would you go about ensuring you have the best possible access to the data, even if the service is down?
+
+No code required, a short summary is fine. 
+Bonus: Provide more than one option, with reason as to why one should be used over the other.
+
+
+Answer:
+Option1:
+We can cache the response from the third party service, say for example weather service.
+The requests to get the temperature of a particular city can be cached.
+We can use a healthcheck for the third party service.
+If the service is down, we can get the result from the cache.
+
+Option2:
+We can have a fallback service.
+If the healthcheck fails or if the API call fails, we can fallback to another alternate service.
+Ex: If we are using a third party service to send mails, if it fails, we can send mails using another similar third party.
+
+Option3:
+Queuing.
+If say the third party mail servivce is down, we can put all the new requests of sending a mail to a queue.
+Later, when the service is up, we can pick the tasks from this queue and send to the third party service.
+
+
+Caching would work better for services like weather report.
+Queuing would work better for services like mailing.
+We should also consider the urgency of the mail, in which case falling back to another third party is a better approach than queuing.
+
+// -----------------------------------------------------------------------
+
+Question #5.3
+You are put in charge of planning the caching strategy of a high traffic site.
+• How would you setup the caching strategy for the site.
+• What kind of technologies and/or third-party services would you use?
+• What kind of challenges need to be considered?
+
+Points to consider:
+1. Content on the site will be regularly updated via a CMS using a MySQL database; whilst other content would remain unchanged for long periods of time.
+2. Elements of each page within the site can contain dynamic content that is customised to a logged in user - e.g. it may display their username and comment notifications.
+3. Content within each page may contain many image assets.
+4. Content on the site is built from data sourced via a third-party API request - e.g. a count displaying the number of times a page has been shared via social media.
+
+
+Answer:
+
+Strategy:
+Seperate out static content and dynamic content.
+Geographic location.
+Cache content per user.
+MySQL query caching
+Load balancing
+Can some of the API calls be made to the third pary API from the client web page itself? Like getting the count of page shares.
+
+
+Technology:
+Redis
+AWS S3
+CDN or AWS Cloudfront
+Loadbalancing
+API gateway like Apigee
+
+Challenges:
+Dependency on the third party service
+Latency from the third party service
+Reliability of the third party service
+Monitor the cost of caching
+Is the cache being used enough and efficiently
+Are we caching what is required?
+The application shouldn't crash if the cache fails.
+
+// -----------------------------------------------------------------------
+ 
+Question #5.4
+You are managing a site with over 100,000 articles.
+Approximately 300 new articles are added to the site every day.
+
+The sitemap for the site is setup with the following structure:
+articles_1.xml
+articles_2.xml
+articles_3.xml
+... etc
+
+Each of these files list 1,000 articles listed in chronological order using the Sitemap XML schema (http://www.sitemaps.org/protocol.html).
+The file articles_1.xml always contains the 1,000 most recently published articles, then articles_2.xml contains 1,001-2,000 etc most recent articles.
+As the article ages, the <lastmod> and <changefreq> nodes within the XML will need to be updated.
+
+What issue can you see this causing?
+Considering that you can change the structuring and naming of the files, how would you propose that the solution could be fixed?
+Note: The solution must allow for the <lastmod> and <changefreq> nodes to be updated when required.
+
+
+Answer:
+Issue:
+Whenever we add new articles, the articles_1.xml will have to be updated and the old articles moved to articles_2.xml and so on.
+Also we have to scan all files to get the article to update the <lastmod> and <changefreq>
+
+Solution:
+Name the files in a date format.
+This way, the new articles will always be in the file with today's date and older articles need not be shifted to another file.
+We can maintain another file with article mapping to the file name. This way we know which file to scan for to change the <lastmod> and <changefreq>
+
+
+// -----------------------------------------------------------------------
+
+Question #5.5
+Using a real-world project that you were involved in, describe the architectual design of the system.
+In your answer, include the following:
+• What was the purpose of the system?
+• What technologies were used?
+• How were the technologies implemented and how did they interact with each other?
+• What potential problems did the design resolve?
+• What issues were encountered during the design?
+• What would you do differently next time?
+
+
+Answer:
+Project Lamaze
+Purpose:
+App for pregnants and parents.
+The admin could post articles.
+Parents could see the articles, post the photos of the child which will later be stitched and converted to a video.
+
+Technologies used:
+AWS S3
+AWS Pushnotification service
+Drupal
+MySQL
+
+The admin will post articles in Drupal.
+We created viewes in Drupal and made the result accesible by REST APIs.
+These were consumed by Mobile apps for the Lamaze app.
+The parents could post the photos. This will be uploaded to AWS S3.
+Later we would get these images and stitch and make a video using ffmpeg.
+When the user registers or logs in from the mobile device, we get the token required for the push notification.
+We register this with the AWS push notification service and in our database, we maintain a table for users and device ids. This was used to make calls to AWS push notification service which would then call apple/google push notification.
+
+What potential problem did it resolve:
+Drupal was chosen as the admin needed to input html content through a WYSIWYG editor.
+Prents could post  photos and we would convert them into videos using the ffmpeg.
+
+What issues were encountered by the design:
+Drupal was too heavy for this. A simple CMS was enough.
+There was no caching, specially when the aontent is static.
+
+
+What would you do differently next time?
+Implement image stiching and making it to video as a seperate microservice.
+Implement caching.
+Not use Drupal for this use case. Implement a simple CMS.
+Design better DB structure.
+___________________________________________________________________________________________________
+___________________________________________________________________________________________________
