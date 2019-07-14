@@ -1,0 +1,80 @@
+Logic Question
+
+// -----------------------------------------------------------------------
+
+Question #7.1
+No code is required for this question.
+
+The following 6 cards are piled on top of each other:
+• 3 Clubs
+• 3 Spades
+• 6 Diamonds
+• 7 Clubs
+• Queen Hearts
+• King Clubs
+
+Considering the following information, determine and EXPLAIN your workings for the order of the pack of cards. 
+1. The cards are randomly shuffled.
+2. The 7 Clubs is above the Queen Hearts.
+3. The bottom cards value is the sum of 3 of the other cards.
+4. One red card is directly on top of the other red card.
+5. The 6 Diamonds is directly below either 3 Clubs or 3 Spades.
+6. The Queen Hearts is above the Spade.
+7. A black card is on the top of the pile.
+
+
+
+Answer:
+
+Assumption: the value of Queen is 12 and King is 13
+Reference: https://www.setgame.com/sites/default/files/instructions/FIVE%20CROWNS%20-%20ENGLISH_0.pdf
+
+The result is
+
+7 Clubs
+3 Clubs
+6 Diamonds
+Queen of Hearts
+3 Spades
+King clubs
+
+
+Breakdown:
+Now we have that 7Clubs is above Queen of hearts
+
+The bottom card's value is the sum of 3 other cards on top.
+The possiblilities are 
+3+3+6= 12 Queen of hearts
+3+3+7=13 King clubs
+
+As it is given that the Queen Hearts is above Spade, we know that King clubs is the bottom card.
+
+
+One red card is directly on top of another
+6 Dimond and Queen of hearts
+It is given that 6 Diamond is directly below 3Club or 3 Spade, and Q is above spade, it has to be
+
+Queen Hearts
+6 Diamond
+
+From 5 and 6 we have
+
+3 Clubs
+6 Diamond
+Queen of hearts
+3 Spades
+King Club
+
+Also from 2 and 7, the 7 Clubs should be on top.
+
+Thus we have the order
+
+
+7 Clubs
+3 Clubs
+6 Diamonds
+Queen of Hearts
+3 Spades
+King clubs
+
+
