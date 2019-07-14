@@ -1,0 +1,85 @@
+Security Questions
+
+// -----------------------------------------------------------------------
+
+Question #4.1 
+A user clicks the following link:
+http://www.sitea.com/?search=%22%3E%3C/style%3E%3Cscript%3Ea=eval;b=alert;a%28b%28/%20Hey!/.source%29%29;%3C/script%3E%27%22%3E
+
+When the page reloads, a JavaScript alert displays the message 'Hey!'.
+
+• What has occurred in this situation?
+• What are the potential dangers?
+• How can it be prevented?
+
+Answer:
+This is called cross-site scripting
+www.sitea.com may be vulnerable to these attacks.
+The dangers are that say if a user is logged into sitea in another tab,
+and he has also opened another tab say siteHack.com, siteHack.com might have a <img src="a malicious url pointing to sitea.com">
+
+This url might trigger some action (like undesired post in the sitea.com) on behalf of the user.
+The dangers might be severe like the malicious url could be to delete the account or to say make a purchase.
+
+
+It can be prevented by first sanitising the input and using auth tokens.
+In this example we can strip out the html and script tags or convert them to html special chars.
+Also when the user logs in to sitea.com every API call should have a token. This way even if the user clicks on a link to sitea.com from a malicious site, it will validate the token.
+
+Ex: www.sitea.com?search=blabla&token=token123
+
+// -----------------------------------------------------------------------
+
+Question #4.2
+The following query is requested via PHP.
+
+$query = mysql_query('
+    SELECT t1.id, t1.name, t2.category
+    FROM table_1 t1
+        JOIN table_2 t2 ON t1.id = t2.foreign_key
+    WHERE 
+        t1.date > DATE_SUB(NOW(), INTERVAL 1 MONTH) AND
+        t2.category = "'.$_GET['parameter'].'"
+    ORDER BY t.date DESC
+');
+
+What is the problem with this?
+How can the problem be prevented?
+
+
+Answer:
+We are using the $_GET['parameter'] in the query without sanitising.
+This can lead to MySql injection attacks.
+
+We have to sanitise the input before passing it to a query
+functions like mysql_realescape_string can be used.
+
+// -----------------------------------------------------------------------
+
+Question #4.3
+User X has just successfully logged into Site A - their bank.
+User X then leaves Site A and visits Site B which is a message board/forum that allows other users to post html code.
+User Y on Site B posts an image with the following html: <img src="http://www.sitea.com/?action=transfer-funds&amount=1000" style="visibility:hidden;"/>
+User X then views the page containing User Y's posted html.
+Without User X knowing, by viewing User Y's code, their Bank at Site A has just transferred money from their account to User Y.
+
+• What has occurred here?
+• Which parties are responsible?
+• How can the problem be prevented?
+
+Answer:
+
+This is called cross-site script or xss
+What the user Y has done is exploited the vulnerability of sitea.com
+
+The user Y, site B and site A are responsible.
+
+Because Y obviously commited the attack. 
+The site B didnot sanitise the input. Or it could have used htmlentities() instead of rendering the input from Y.
+Or cloud have stored the input from Y by htmlspecialchars()
+The site A beause it didnot use any authentication.
+The url could have been 
+http://www.sitea.com/?action=transfer-funds&amount=1000&token=<token here which you can get when you login>
+
+___________________________________________________________________________________________________
+___________________________________________________________________________________________________
