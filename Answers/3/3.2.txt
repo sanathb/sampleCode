@@ -1,0 +1,30 @@
+Question #3.2
+A table has over 1 million rows with multiple columns containing long text strings.
+A simple query on the page is used for pagination to display pages of the results.
+When querying low page numbers, it runs within 0.01 seconds per query, however, when viewing high page counts the query time extends dramatically to over 0.5 seconds.
+Both example queries are included below.
+
+SELECT table_1.*
+FROM table_1
+WHERE table_1.column = "zyx"
+ORDER BY table_1.date DESC
+LIMIT 0, 20;
+Time: 0.01s
+
+SELECT table_1.*
+FROM table_1
+WHERE table_1.column = "zyx"
+ORDER BY table_1.date DESC
+LIMIT 10000, 20;
+Time: 0.5s
+
+What is the issue with this query? 
+Using only SQL and the existing defined parameters, how would you rewrite the query to enhance the performance?
+
+
+
+Answer:
+In this case it is scanning and sorting all the results.
+We have to index the columns.
+In this case we are ordering by table_1.date and also there is a WHERE condition on table_1.column.
+We can index on (table_1.column, table_1.date)
