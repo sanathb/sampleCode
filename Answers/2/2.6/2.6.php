@@ -29,6 +29,7 @@ Important notes:
 • If one of the listed holidays falls on a Saturday or Sunday, it must be rolled over to the next Monday - with the exception of Anzac Day (which doesn't).
 
 Create a class that when given a specific date and time formatted YEAR-MONTH-DAY HOUR:MINUTE:SECOND (Y-m-d H:i:s), will return via two separate methods the dispatch date and the delivery date of the order formatted as YEAR-MONTH-DAY. Include unit tests for each date.*/
+namespace Sanath;
 
 Class Logistics {
 
