@@ -1,0 +1,21 @@
+Question #3.3
+A simple query includes a sub-query within the SQL SELECT statement.
+The sub-query returns a column value from a second table that matches the date from the first table.
+This query is not running at an optimised speed, how would you rewrite the query to improve the performance.
+
+SELECT t1.id, t1.name, t1.date AS date_filter, (SELECT t2.column_x FROM table_2 t2 WHERE t2.date = date_filter LIMIT 1) AS column_x
+FROM table_1 t1
+WHERE t1.category_id = 10
+ORDER BY t1.date
+LIMIT 10
+
+
+Answer:
+
+SELECT t1.id, t1.name, t1.date, t2.colum_x FROM table_1 as t1 INNER JOIN table_2 as t2 ON t1.date = t2.date 
+WHERE 
+t1.category_id = 10
+ORDER BY t1.date
+LIMIT 10
+
+Also if it is indexed on (t1.category_id, t1.date) and (t2.date) it will be more eficient.
