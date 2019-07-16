@@ -1,0 +1,25 @@
+Question #3.1 
+The following two tables contain data that is related to each other via the 'id' of 'table_1' and 'foreign_key' of 'table_2'.
+Write an SQL query that will output all columns from 'table_1' and 'column_z' of 'table_2' merged together into a single query.
+
+The schema of both tables is as follows:
+
+CREATE TABLE `table_1` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `column_x` varchar(255) DEFAULT NULL,
+    `column_y` varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `table_2` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `foreign_key` int(11) DEFAULT NULL,
+    `column_z` varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `foreign_key` (`foreign_key`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+Answer:
+SELECT table_1.id, table_1.column_x, table_1.column_y, table_2.column_z FROM `table_1` INNER JOIN `table_2` ON table_1.id = table_2.foreign_key
+
+
