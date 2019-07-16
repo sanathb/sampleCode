@@ -32,6 +32,14 @@ Create a class that when given a specific date and time formatted YEAR-MONTH-DAY
 
 Class Logistics {
 
+	/**
+	 * Get diapatch date in YEAR-MONTH-DAY format
+	 *
+	 * @param string $orderDate
+	 * @param bool $formatted
+	 *
+	 * @return string|integer
+	 */
 	public function getDispatchDate($orderDate, $formatted = true) {
 		$orderDate = strtotime($orderDate);
 
@@ -44,9 +52,17 @@ Class Logistics {
 		return $formatted ? $this->getFormatedDate($dispatchDate) : $dispatchDate;
 	}
 
+	/**
+	 * Get delivery date in YEAR-MONTH-DAY format
+	 *
+	 * @param string $orderDate
+	 *
+	 * @return string
+	 */
 	public function getDeliveryDate($orderDate) {
 		$date = $this->getDispatchDate($orderDate, false);
 		$transportDays = 2; //3 days including dispatch date
+
 		for ($i=0; $i < $transportDays; $i++) { 
 			$date = $this->getNextBusinessDay($date);
 		}
@@ -54,6 +70,13 @@ Class Logistics {
 		return $this->getFormatedDate($date);
 	}
 
+	/**
+	 * Chek if it is a working day
+	 *
+	 * @param integer $date
+	 *
+	 * @return bool
+	 */
 	protected function isBusinessDay($date) {
 		if (!$this->isPublicHoliday($date) && !$this->isWeekend($date)) {
 			return true;
@@ -62,11 +85,25 @@ Class Logistics {
 		return false;
 	}
 
+	/**
+	 * Check if the time is before 4PM
+	 *
+	 * @param integer $date
+	 *
+	 * @return bool
+	 */
 	protected function isBusinessHour($date) {
 		$hour = date('G', $date);
 		return $hour < 16 ? true : false;
 	}
 
+	/**
+	 * Get next working day
+	 *
+	 * @param integer $date
+	 *
+	 * @return integer
+	 */
 	protected function getNextBusinessDay($date) {
 		$date = $this->getNextDay($date);
 
@@ -77,10 +114,24 @@ Class Logistics {
 		return $date;
 	}
 
+	/**
+	 * get next day
+	 *
+	 * @param integer $date
+	 *
+	 * @return integer
+	 */
 	protected function getNextDay($date) {
 		return strtotime('+1 day', $date);
 	}
 
+	/**
+	 * Check if it is a public holiday
+	 *
+	 * @param integer $date
+	 *
+	 * @return bool
+	 */
 	protected function isPublicHoliday($date) {
 		$queenBirthday = $this->getQueenBirthDay($date);
 		$labourDay = $this->getLabourDay($date);
@@ -103,6 +154,13 @@ Class Logistics {
 		return in_array($date, $pubilcHolidays);
 	}
 
+	/**
+	 * Get Queen birthday
+	 *
+	 * @param integer $date
+	 *
+	 * @return string DD MMMM
+	 */
 	protected function getQueenBirthDay($date) {
 		// Queen's Birthday : Second Monday in June
 		$year = date('Y', $date);
@@ -110,12 +168,26 @@ Class Logistics {
 
 	}
 
+	/**
+	 * Get Labour day
+	 *
+	 * @param integer $date
+	 *
+	 * @return string DD MMMM
+	 */
 	protected function getLabourDay($date) {
 		// First Monday in October
 		$year = date('Y', $date);
 		return date('j F', strtotime('First Monday October ' . $year));
 	}
 
+	/**
+	 * Get easter date
+	 *
+	 * @param integer $date
+	 *
+	 * @return array Array of good friday date and easter Monday in DD MMMM
+	 */
 	protected function getEaster($date) {
 		$year = date('Y', $date);
 		$date = easter_date($year);
@@ -128,19 +200,36 @@ Class Logistics {
 
 	}
 
+	/**
+	 * Check if date is a weekend
+	 *
+	 * @param integer $date
+	 *
+	 * @return bool
+	 */
 	protected function isWeekend($date) {
 		$day = date('l', $date);
 
 		return in_array($day, ['Saturday', 'Sunday']);
 	}
 
+	/**
+	 * Decorator for date
+	 *
+	 * @param integer $date
+	 *
+	 * @return string
+	 */
 	protected function getFormatedDate($date) {
 		return date('Y-m-d', $date);
 	}
 }
 
+// Ex:
+
 $logistics = new Logistics();
-$date = '2019-01-26 12:45:41';
+
+// $date = '2019-01-26 12:45:41';
 $date = '2019-01-18 17:45:41';
 
 echo "\nOrder date: $date";
