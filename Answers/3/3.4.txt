@@ -1,0 +1,15 @@
+Question #3.4
+A table contains a set of unique rows of data that includes a composite index on the 'column_1' and 'column_2' columns.
+You have a script that needs to update existing rows within the table, if the row does not exist, then a new row needs to be inserted into the table.
+Using the basic table schema below, how would you write a single SQL query to handle both the INSERT and UPDATE events?
+
+CREATE TABLE `table_1` (
+    `column_1` varchar(255) DEFAULT NULL,
+    `column_2` varchar(255) DEFAULT NULL,
+    `column_3` varchar(255) DEFAULT NULL,
+    UNIQUE KEY `column_1_column_2` (`column_1`, `column_2`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+Answer:
+Ex:
+INSERT INTO table_1 VALUES(1,2,3) ON DUPLICATE KEY UPDATE column_3=3;
